@@ -1,1 +1,378 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MegaEngine</title>
+<script src="https://js.puter.com/v2/"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#03030a;--c1:#08080f;--c2:#0d0d18;--bd:#1a1a2e;--acc:#ff2d78;--a2:#c8ff00;--a3:#00d4ff;--a4:#ff9500;--a5:#b388ff;--txt:#f0f0ff;--mut:#404060;--grn:#00e5a0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 60% 30% at 20% 10%,rgba(255,45,120,.06),transparent),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(0,212,255,.05),transparent);pointer-events:none}
+.hdr{position:sticky;top:0;z-index:99;background:rgba(3,3,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:10px}
+.lic{width:32px;height:32px;background:linear-gradient(135deg,var(--acc),var(--a2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.95rem;box-shadow:0 0 16px rgba(255,45,120,.35)}
+.lname{font-family:"Orbitron",monospace;font-size:.95rem;font-weight:900;letter-spacing:3px;background:linear-gradient(90deg,var(--acc),var(--a2),var(--a3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lsub{font-size:.42rem;letter-spacing:2px;color:var(--mut);font-family:"Share Tech Mono",monospace}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:bk 2s infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+.tabs{display:flex;overflow-x:auto;background:var(--c1);border-bottom:1px solid var(--bd)}
+.tabs::-webkit-scrollbar{height:2px}.tabs::-webkit-scrollbar-thumb{background:var(--acc)}
+.tab{display:flex;align-items:center;gap:6px;padding:11px 13px;font-family:"Share Tech Mono",monospace;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.tab.on{color:var(--txt);border-bottom-color:var(--tc)}
+main{max-width:800px;margin:0 auto;padding:14px 12px}
+.pnl{display:none}.pnl.on{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.card{background:var(--c1);border:1px solid var(--bd);border-radius:11px;overflow:hidden;margin-bottom:12px}
+.chdr{padding:10px 14px;background:var(--c2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:7px}
+.cac{width:3px;height:13px;border-radius:2px;flex-shrink:0}
+.ct{font-family:"Share Tech Mono",monospace;font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--mut);flex:1}
+.cs{font-family:"Share Tech Mono",monospace;font-size:.46rem;color:var(--mut)}
+textarea{width:100%;background:transparent;border:none;outline:none;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:.83rem;line-height:1.7;padding:11px 14px;resize:none}
+textarea::placeholder{color:var(--mut)}
+.chips{display:flex;gap:4px;flex-wrap:wrap;padding:6px 14px;border-top:1px solid var(--bd)}
+.chip{padding:3px 8px;border-radius:16px;border:1px solid var(--bd);font-size:.56rem;color:var(--mut);cursor:pointer;transition:all .18s;white-space:nowrap;font-family:"Share Tech Mono",monospace}
+.chip:hover{border-color:var(--tc,var(--acc));color:var(--tc,var(--acc))}
+select,input[type=password]{width:100%;background:var(--bg);border:1px solid var(--bd);color:var(--txt);font-family:"DM Sans",sans-serif;font-size:.74rem;padding:7px 8px;outline:none;cursor:pointer;border-radius:6px}
+input[type=password]:focus{border-color:var(--a3)}
+.brow{display:flex;gap:7px;padding:11px 14px;border-top:1px solid var(--bd)}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;border-radius:7px;font-family:"Share Tech Mono",monospace;font-size:.64rem;letter-spacing:1px;cursor:pointer;border:none;text-transform:uppercase;font-weight:700;flex:1;transition:all .15s}
+.btn:disabled{opacity:.22;cursor:not-allowed}.btn:active{transform:scale(.97)}
+.pb{height:2px;background:var(--bd)}.pf{height:100%;width:0;transition:width .4s;border-radius:2px}
+.pm{font-family:"Share Tech Mono",monospace;font-size:.56rem;color:var(--mut);padding:7px 14px;display:none}.pm.on{display:block}
+.out{padding:12px 14px;display:none;border-top:1px solid var(--bd)}.out.on{display:block}
+img.oi{width:100%;border-radius:7px;display:block}
+.oa{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.ol{padding:8px 13px;border-radius:7px;font-family:"Share Tech Mono",monospace;font-size:.58rem;text-decoration:none;display:inline-flex;align-items:center;gap:5px;border:none;cursor:pointer;text-transform:uppercase;font-weight:700}
+.er{padding:8px 14px;background:rgba(255,45,120,.08);border-top:1px solid rgba(255,45,120,.25);font-family:"Share Tech Mono",monospace;font-size:.62rem;color:#ff6090;display:none;line-height:1.5;word-break:break-all}.er.on{display:block}
+.chat-box{height:300px;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:9px 12px;border-radius:10px;font-size:.82rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.msg.user{background:rgba(255,45,120,.12);border:1px solid rgba(255,45,120,.2);align-self:flex-end}
+.msg.ai{background:rgba(179,136,255,.08);border:1px solid rgba(179,136,255,.15);align-self:flex-start}
+.msg.thinking{opacity:.6;font-style:italic}
+.chat-in{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--bd)}
+.chat-in textarea{height:44px;padding:10px 12px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);flex:1;color:var(--txt)}
+.send-btn{padding:10px 14px;border-radius:7px;background:var(--a5);color:#000;font-family:"Share Tech Mono",monospace;font-size:.62rem;font-weight:700;border:none;cursor:pointer;white-space:nowrap;align-self:flex-end}
+.key-row{padding:10px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.key-lbl{font-family:"Share Tech Mono",monospace;font-size:.52rem;color:var(--mut);white-space:nowrap}
+.ks{font-family:"Share Tech Mono",monospace;font-size:.5rem;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.ks.ok{background:rgba(0,229,160,.1);color:var(--grn);border:1px solid rgba(0,229,160,.2)}
+.ks.no{background:rgba(255,45,120,.1);color:var(--acc);border:1px solid rgba(255,45,120,.2)}
+.itabs{display:flex;border-bottom:1px solid var(--bd);overflow-x:auto}
+.itab{padding:8px 13px;font-family:"Share Tech Mono",monospace;font-size:.54rem;letter-spacing:1px;text-transform:uppercase;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.itab.on{color:var(--txt);border-bottom-color:var(--a5)}
+.rbox{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:12px;font-size:.82rem;line-height:1.7;white-space:pre-wrap;max-height:380px;overflow-y:auto;color:var(--txt)}
+.subpad{padding:12px 14px}
+.subpad textarea{height:68px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);padding:9px;color:var(--txt);display:block}
+.info-box{margin:10px 14px;padding:10px 12px;background:rgba(179,136,255,.06);border:1px solid rgba(179,136,255,.15);border-radius:8px;font-family:"Share Tech Mono",monospace;font-size:.56rem;color:var(--mut);line-height:1.8}
+.info-box a{color:var(--a3);text-decoration:none}
+</style>
+</head><body>
 
+<div class="hdr">
+  <div class="logo">
+    <div class="lic">&#9889;</div>
+    <div><div class="lname">MEGAENGINE</div><div class="lsub">Gemini 2.5 &#183; FLUX &#183; SDXL &#183; 100% Free</div></div>
+  </div>
+  <div class="dot"></div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" style="--tc:var(--a5)" onclick="sw('gemini',this)">&#129302; Gemini</div>
+  <div class="tab" style="--tc:var(--acc)" onclick="sw('img',this)">&#128444; SDXL</div>
+  <div class="tab" style="--tc:var(--a3)" onclick="sw('flux',this)">&#9889; FLUX</div>
+  <div class="tab" style="--tc:var(--a2)" onclick="sw('dream',this)">&#127775; Dream</div>
+</div>
+
+<main>
+
+<!-- ── GEMINI TAB ── -->
+<div class="pnl on" id="p-gemini"><div class="card">
+  <div class="chdr">
+    <div class="cac" style="background:var(--a5)"></div>
+    <span class="ct">Gemini 2.5 Flash</span>
+    <span class="cs">Chat &#183; Lyrics &#183; Stories &#183; Ideas</span>
+  </div>
+  <div class="key-row">
+    <span class="key-lbl">GEMINI KEY:</span>
+    <input type="password" id="gKey" placeholder="aistudio.google.com/apikey — free, takes 30 sec" style="flex:1;min-width:0">
+    <button onclick="saveKey()" style="padding:7px 11px;background:var(--a5);color:#000;border:none;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:.58rem;cursor:pointer;font-weight:700;white-space:nowrap">SAVE</button>
+    <span class="ks no" id="kSt">NO KEY</span>
+  </div>
+  <div class="info-box">
+    Get your free key in 30 sec: <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> → Create API key → Copy → Paste above → SAVE
+  </div>
+  <div class="itabs">
+    <div class="itab on" onclick="sm2('chat',this)">&#128172; Chat</div>
+    <div class="itab" onclick="sm2('lyrics',this)">&#127925; Lyrics</div>
+    <div class="itab" onclick="sm2('story',this)">&#128218; Story</div>
+    <div class="itab" onclick="sm2('ideas',this)">&#128161; Ideas</div>
+  </div>
+
+  <!-- CHAT -->
+  <div id="m-chat">
+    <div class="chat-box" id="chatBox">
+      <div class="msg ai">Hi! I'm Gemini 2.5 Flash. Add your free API key above then chat, write lyrics, stories or get ideas!</div>
+    </div>
+    <div class="chat-in">
+      <textarea id="chatIn" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+      <button class="send-btn" onclick="sendChat()">&#9658; Send</button>
+    </div>
+  </div>
+
+  <!-- LYRICS -->
+  <div id="m-lyrics" style="display:none">
+    <div class="subpad">
+      <textarea id="lyricIn" placeholder="e.g. upbeat pop song about summer love, catchy chorus, danceable vibe..."></textarea>
+      <div class="chips" style="--tc:var(--a5);padding:6px 0;border:none;margin-top:4px">
+        <div class="chip" onclick="sc('lyricIn','upbeat pop song about summer love, catchy chorus, danceable, fun and flirty')">Summer pop</div>
+        <div class="chip" onclick="sc('lyricIn','emotional ballad about lost love, piano driven, heartbreaking chorus, raw and honest')">Sad ballad</div>
+        <div class="chip" onclick="sc('lyricIn','dark rap about city life, hard hitting, introspective storytelling style')">Dark rap</div>
+        <div class="chip" onclick="sc('lyricIn','anthemic rock song about fighting back, powerful chorus, guitar driven, motivational')">Rock anthem</div>
+        <div class="chip" onclick="sc('lyricIn','smooth RnB love song, silky vocals, night drive vibe, romantic and sensual')">Smooth RnB</div>
+        <div class="chip" onclick="sc('lyricIn','gospel choir song about hope and redemption, powerful uplifting chorus, spiritual')">Gospel</div>
+      </div>
+      <button class="btn" style="background:var(--a5);color:#000;margin-top:8px" onclick="genText('lyricIn','lyRes','lyOut','lyPF','Write complete song lyrics with Verse 1, Pre-Chorus, Chorus, Verse 2, Chorus, Bridge, Final Chorus for: ','You are a professional Grammy-winning songwriter. Write vivid, original, emotionally powerful lyrics. Format clearly with section labels in brackets like [Verse 1].')">&#9889; Write Lyrics</button>
+      <div class="pb" style="margin-top:8px"><div class="pf" id="lyPF" style="background:linear-gradient(90deg,var(--a5),var(--a3))"></div></div>
+      <div id="lyOut" style="display:none;margin-top:10px">
+        <div class="rbox" id="lyRes"></div>
+        <div class="oa" style="margin-top:8px">
+          <button class="ol" style="background:var(--a5);color:#000" onclick="cp('lyRes')">&#128203; Copy Lyrics</button>
+          <button class="ol" style="background:var(--c2);color:var(--a5);border:1px solid rgba(179,136,255,.2)" onclick="document.getElementById('lyRes').textContent='';document.getElementById('lyOut').style.display='none'">&#10005; Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <div id="m-story" style="display:none">
+    <div class="subpad">
+      <textarea id="storyIn" placeholder="e.g. sci-fi thriller, last human alive discovers AI protecting them secretly, twist ending..."></textarea>
+      <div class="chips" style="--tc:var(--a5);padding:6px 0;border:none;margin-top:4px">
+        <div class="chip" onclick="sc('storyIn','sci-fi thriller, last human alive, discovers AI protecting them secretly, twist ending')">Sci-fi twist</div>
+        <div class="chip" onclick="sc('storyIn','fantasy, young wizard discovers forbidden magic, makes impossible choice, dark ending')">Fantasy</div>
+        <div class="chip" onclick="sc('storyIn','horror, family moves into old house, children talk to invisible entity, terrifying twist')">Horror</div>
+        <div class="chip" onclick="sc('storyIn','romantic comedy, bitter rivals forced to share an office, slowly fall in love')">Rom-com</div>
+        <div class="chip" onclick="sc('storyIn','post-apocalyptic, lone survivor finds a child with mysterious powers, road trip survival')">Post-apocalyptic</div>
+      </div>
+      <button class="btn" style="background:var(--a5);color:#000;margin-top:8px" onclick="genText('storyIn','stRes','stOut','stPF','Write a compelling, vivid short story about: ','You are a master storyteller. Write engaging stories with strong characters, tension and satisfying endings. Around 500 words. Make it gripping from the first sentence.')">&#9889; Write Story</button>
+      <div class="pb" style="margin-top:8px"><div class="pf" id="stPF" style="background:linear-gradient(90deg,var(--a5),var(--acc))"></div></div>
+      <div id="stOut" style="display:none;margin-top:10px">
+        <div class="rbox" id="stRes"></div>
+        <div class="oa" style="margin-top:8px">
+          <button class="ol" style="background:var(--a5);color:#000" onclick="cp('stRes')">&#128203; Copy Story</button>
+          <button class="ol" style="background:var(--c2);color:var(--a5);border:1px solid rgba(179,136,255,.2)" onclick="document.getElementById('stRes').textContent='';document.getElementById('stOut').style.display='none'">&#10005; Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDEAS -->
+  <div id="m-ideas" style="display:none">
+    <div class="subpad">
+      <textarea id="ideaIn" placeholder="e.g. 10 business ideas for a teenager with no money, YouTube channel ideas about cooking..."></textarea>
+      <div class="chips" style="--tc:var(--a5);padding:6px 0;border:none;margin-top:4px">
+        <div class="chip" onclick="sc('ideaIn','10 creative business ideas I can start with no money as a teenager')">Teen business</div>
+        <div class="chip" onclick="sc('ideaIn','unique YouTube channel ideas with low competition but high growth potential')">YouTube ideas</div>
+        <div class="chip" onclick="sc('ideaIn','10 realistic ways to make money from my phone with zero experience')">Phone income</div>
+        <div class="chip" onclick="sc('ideaIn','creative romantic date ideas on a very tight budget, no car needed')">Date ideas</div>
+        <div class="chip" onclick="sc('ideaIn','10 side hustle ideas for someone with a full time job, minimal time needed')">Side hustles</div>
+      </div>
+      <button class="btn" style="background:var(--a5);color:#000;margin-top:8px" onclick="genText('ideaIn','idRes','idOut','idPF','','You are a creative business consultant. Give specific, actionable, numbered ideas. Be practical, inspiring and concise. No fluff.')">&#9889; Get Ideas</button>
+      <div class="pb" style="margin-top:8px"><div class="pf" id="idPF" style="background:linear-gradient(90deg,var(--a5),var(--a2))"></div></div>
+      <div id="idOut" style="display:none;margin-top:10px">
+        <div class="rbox" id="idRes"></div>
+        <div class="oa" style="margin-top:8px">
+          <button class="ol" style="background:var(--a5);color:#000" onclick="cp('idRes')">&#128203; Copy</button>
+          <button class="ol" style="background:var(--c2);color:var(--a5);border:1px solid rgba(179,136,255,.2)" onclick="document.getElementById('idRes').textContent='';document.getElementById('idOut').style.display='none'">&#10005; Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ── SDXL TAB ── -->
+<div class="pnl" id="p-img"><div class="card">
+  <div class="chdr"><div class="cac" style="background:var(--acc)"></div><span class="ct">Stable Diffusion XL</span><span class="cs">Free via Puter.js — no key needed</span></div>
+  <textarea id="aP" placeholder="masterpiece, photorealistic, 8k, cinematic lighting, futuristic city at night, neon lights..." style="height:78px"></textarea>
+  <div class="chips" style="--tc:var(--acc)">
+    <div class="chip" onclick="sc('aP','masterpiece, photorealistic, 8k, cyberpunk city at night, flying cars, neon signs, rain reflections')">Cyberpunk city</div>
+    <div class="chip" onclick="sc('aP','masterpiece, fantasy, magical glowing forest, fairy lights, ancient trees, mystical atmosphere')">Magical forest</div>
+    <div class="chip" onclick="sc('aP','beautiful woman golden hour beach sunset, cinematic, photorealistic, 8k, bokeh')">Woman sunset</div>
+    <div class="chip" onclick="sc('aP','epic dragon flying over mountains, fantasy art, dramatic lighting, detailed scales, cinematic')">Epic dragon</div>
+    <div class="chip" onclick="sc('aP','masterpiece, photorealistic, deep space nebula, gas giant planet, stars, cosmic scale')">Space nebula</div>
+    <div class="chip" onclick="sc('aP','abandoned futuristic city overgrown with jungle, ruins, cinematic, detailed, 8k')">Jungle ruins</div>
+  </div>
+  <div class="pb"><div class="pf" id="aPF" style="background:linear-gradient(90deg,var(--acc),var(--a2))"></div></div>
+  <div class="pm" id="aPM"></div>
+  <div class="out" id="aO">
+    <img class="oi" id="aI" alt="">
+    <div class="oa">
+      <button class="ol" style="background:var(--acc);color:#000" onclick="sv('aI','megaengine-sdxl.png')">&#8595; Save PNG</button>
+      <button class="ol" style="background:var(--c2);color:var(--acc);border:1px solid rgba(255,45,120,.2)" onclick="op('aI')">&#8599; Open Full</button>
+    </div>
+  </div>
+  <div class="er" id="aE"></div>
+  <div class="brow"><button class="btn" style="background:var(--acc);color:#000" id="aB" onclick="genImg('aP','stabilityai/stable-diffusion-xl-base-1.0','aPF','aPM','aE','aO','aI','aB')">&#9889; Generate Image</button></div>
+</div></div>
+
+<!-- ── FLUX TAB ── -->
+<div class="pnl" id="p-flux"><div class="card">
+  <div class="chdr"><div class="cac" style="background:var(--a3)"></div><span class="ct">FLUX.1 Schnell</span><span class="cs">Free via Puter.js — no key needed</span></div>
+  <textarea id="bP" placeholder="hyperrealistic photo of futuristic sports car on mountain road at golden hour, dramatic clouds..." style="height:78px"></textarea>
+  <div class="chips" style="--tc:var(--a3)">
+    <div class="chip" onclick="sc('bP','hyperrealistic photo of futuristic sports car on mountain road, golden hour, dramatic clouds, cinematic')">Sports car</div>
+    <div class="chip" onclick="sc('bP','macro photography of colorful butterfly on exotic flower, water droplets, sharp focus, bokeh background')">Butterfly macro</div>
+    <div class="chip" onclick="sc('bP','aerial drone shot of tropical island, crystal clear turquoise water, white sand beach, paradise')">Tropical island</div>
+    <div class="chip" onclick="sc('bP','cozy coffee shop interior, warm amber lighting, steam rising from cup, autumn rain outside window')">Cozy coffee</div>
+    <div class="chip" onclick="sc('bP','ancient Roman colosseum at golden hour, dramatic sky, photorealistic, cinematic photography')">Colosseum</div>
+  </div>
+  <div class="pb"><div class="pf" id="bPF" style="background:linear-gradient(90deg,var(--a3),var(--acc))"></div></div>
+  <div class="pm" id="bPM"></div>
+  <div class="out" id="bO">
+    <img class="oi" id="bI" alt="">
+    <div class="oa">
+      <button class="ol" style="background:var(--a3);color:#000" onclick="sv('bI','megaengine-flux.png')">&#8595; Save PNG</button>
+      <button class="ol" style="background:var(--c2);color:var(--a3);border:1px solid rgba(0,212,255,.2)" onclick="op('bI')">&#8599; Open Full</button>
+    </div>
+  </div>
+  <div class="er" id="bE"></div>
+  <div class="brow"><button class="btn" style="background:var(--a3);color:#000" id="bB" onclick="genImg('bP','black-forest-labs/FLUX.1-schnell','bPF','bPM','bE','bO','bI','bB')">&#9889; Generate FLUX</button></div>
+</div></div>
+
+<!-- ── DREAMSHAPER TAB ── -->
+<div class="pnl" id="p-dream"><div class="card">
+  <div class="chdr"><div class="cac" style="background:var(--a2)"></div><span class="ct">DreamShaper</span><span class="cs">Free via Puter.js — no key needed</span></div>
+  <textarea id="cP" placeholder="stunning portrait, cinematic lighting, detailed face, professional photography, shallow depth of field..." style="height:78px"></textarea>
+  <div class="chips" style="--tc:var(--a2)">
+    <div class="chip" onclick="sc('cP','stunning female portrait, cinematic lighting, golden hour, 8k, photorealistic, creamy bokeh background')">Cinematic portrait</div>
+    <div class="chip" onclick="sc('cP','anime girl, beautiful, highly detailed eyes, cherry blossoms, soft lighting, studio ghibli style')">Anime girl</div>
+    <div class="chip" onclick="sc('cP','oil painting, renaissance style, noble woman, intricate gold dress, dramatic chiaroscuro lighting')">Renaissance art</div>
+    <div class="chip" onclick="sc('cP','fantasy warrior woman, ornate silver armor, epic battlefield at sunset, dramatic sky, digital art')">Fantasy warrior</div>
+    <div class="chip" onclick="sc('cP','cyberpunk girl, neon lights, chrome implants, rain, dark city background, hyper detailed')">Cyberpunk girl</div>
+  </div>
+  <div class="pb"><div class="pf" id="cPF" style="background:linear-gradient(90deg,var(--a2),var(--a3))"></div></div>
+  <div class="pm" id="cPM"></div>
+  <div class="out" id="cO">
+    <img class="oi" id="cI" alt="">
+    <div class="oa">
+      <button class="ol" style="background:var(--a2);color:#000" onclick="sv('cI','megaengine-dream.png')">&#8595; Save PNG</button>
+      <button class="ol" style="background:var(--c2);color:var(--a2);border:1px solid rgba(200,255,0,.2)" onclick="op('cI')">&#8599; Open Full</button>
+    </div>
+  </div>
+  <div class="er" id="cE"></div>
+  <div class="brow"><button class="btn" style="background:var(--a2);color:#000" id="cB" onclick="genImg('cP','Lykon/DreamShaper','cPF','cPM','cE','cO','cI','cB')">&#9889; Generate</button></div>
+</div></div>
+
+</main>
+
+<script>
+var apiKey = localStorage.getItem('gk') || '';
+var hist = [];
+
+window.onload = function() {
+  if (apiKey) { document.getElementById('gKey').value = apiKey; setKS(true); }
+};
+
+function saveKey() {
+  apiKey = document.getElementById('gKey').value.trim();
+  if (apiKey) { localStorage.setItem('gk', apiKey); setKS(true); }
+}
+function setKS(ok) {
+  var e = document.getElementById('kSt');
+  e.textContent = ok ? 'KEY OK' : 'NO KEY';
+  e.className = 'ks ' + (ok ? 'ok' : 'no');
+}
+
+function sw(id, el) {
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.pnl').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('p-' + id).classList.add('on');
+}
+
+function sm2(mode, el) {
+  document.querySelectorAll('.itab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  ['chat','lyrics','story','ideas'].forEach(m => {
+    document.getElementById('m-' + m).style.display = m === mode ? 'block' : 'none';
+  });
+}
+
+async function callG(prompt, sys) {
+  if (!apiKey) throw new Error('Paste your free Gemini API key above and tap SAVE.\n\nGet it free at: aistudio.google.com/apikey');
+  var msgs = [];
+  if (sys) msgs.push({role:'user',parts:[{text:sys}]}, {role:'model',parts:[{text:'Understood, I will follow these instructions.'}]});
+  hist.forEach(m => msgs.push(m));
+  msgs.push({role:'user', parts:[{text: prompt}]});
+  var r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=' + apiKey,
+    {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({contents: msgs})});
+  var d = await r.json();
+  if (d.error) throw new Error(d.error.message);
+  return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
+async function sendChat() {
+  var inp = document.getElementById('chatIn'), txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = '';
+  addM(txt, 'user');
+  var t = addM('Thinking...', 'ai thinking');
+  hist.push({role:'user', parts:[{text:txt}]});
+  try {
+    var r = await callG(txt, 'You are MegaEngine AI, a helpful, creative and witty assistant. Be concise, warm and friendly.');
+    t.textContent = r; t.classList.remove('thinking');
+    hist.push({role:'model', parts:[{text:r}]});
+  } catch(e) { t.textContent = '⚠ ' + e.message; t.classList.remove('thinking'); }
+  var b = document.getElementById('chatBox'); b.scrollTop = b.scrollHeight;
+}
+
+function addM(txt, cls) {
+  var b = document.getElementById('chatBox'), d = document.createElement('div');
+  d.className = 'msg ' + cls; d.textContent = txt;
+  b.appendChild(d); b.scrollTop = b.scrollHeight; return d;
+}
+
+async function genText(inId, resId, outId, pfId, prefix, sys) {
+  var txt = document.getElementById(inId).value.trim(); if (!txt) return;
+  pp(pfId, 10);
+  var tk = setInterval(() => { pp(pfId, Math.min(parseFloat(document.getElementById(pfId).style.width) + 3, 88)); }, 700);
+  try {
+    var r = await callG(prefix + txt, sys);
+    clearInterval(tk); pp(pfId, 100);
+    document.getElementById(resId).textContent = r;
+    document.getElementById(outId).style.display = 'block';
+  } catch(e) {
+    clearInterval(tk); pp(pfId, 0);
+    document.getElementById(resId).textContent = '⚠ ' + e.message;
+    document.getElementById(outId).style.display = 'block';
+  }
+}
+
+async function genImg(pId, model, pfId, pmId, eId, oId, imgId, btnId) {
+  var prompt = g(pId).trim(); if (!prompt) { se(eId,'Enter a prompt first'); return; }
+  he(eId); document.getElementById(btnId).disabled = true; document.getElementById(oId).classList.remove('on');
+  pp(pfId, 5); smm(pmId, 'Generating image...');
+  var tk = setInterval(() => { pp(pfId, Math.min(parseFloat(document.getElementById(pfId).style.width||0)+2, 90)); }, 1500);
+  try {
+    var img = await puter.ai.txt2img(prompt, false, model);
+    clearInterval(tk); pp(pfId, 100); smm(pmId, 'Done!');
+    document.getElementById(imgId).src = img.src;
+    document.getElementById(oId).classList.add('on');
+  } catch(e) { clearInterval(tk); pp(pfId,0); hmm(pmId); se(eId, e.message||String(e)); }
+  document.getElementById(btnId).disabled = false;
+  setTimeout(() => hmm(pmId), 3000);
+}
+
+function sc(id,t){document.getElementById(id).value=t;}
+function g(id){return(document.getElementById(id)||{}).value||'';}
+function sv(id,fn){var e=document.getElementById(id);if(!e||!e.src)return;var a=document.createElement('a');a.href=e.src;a.download=fn;a.click();}
+function op(id){var e=document.getElementById(id);if(e&&e.src)window.open(e.src,'_blank');}
+function pp(id,w){var e=document.getElementById(id);if(e)e.style.width=w+'%';}
+function smm(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.classList.add('on');}}
+function hmm(id){var e=document.getElementById(id);if(e)e.classList.remove('on');}
+function se(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.classList.add('on');}}
+function he(id){var e=document.getElementById(id);if(e)e.classList.remove('on');}
+function cp(id){var e=document.getElementById(id);if(e)navigator.clipboard.writeText(e.textContent).then(()=>{}).catch(()=>{});}
+</script>
+</body></html>
